@@ -61,10 +61,6 @@ class AuthController extends Controller
         }
     }
 
-    public function userProfile(){
-        return auth()->user();
-    }
-
     public function logout(){
         auth()->user()->tokens()->delete();
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,11 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
 Route::post('login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('register', [AuthController::class, 'register']);
-    Route::get('user-profile', [AuthController::class, 'userProfile']);
+    Route::get('user-profile', [UserController::class, 'userProfile']);
+    Route::put('update-profile', [UserController::class, 'update']);
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('photos', [PhotoController::class, 'index']);
     Route::post('store-photo', [PhotoController::class, 'store']);
@@ -28,6 +35,3 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::delete('delete-photo', [PhotoController::class, 'destoy']);
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
