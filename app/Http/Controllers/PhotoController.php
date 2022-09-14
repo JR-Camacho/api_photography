@@ -18,6 +18,14 @@ class PhotoController extends Controller
         return Photo::all();
     }
 
+    public function estudioPhotos(){
+        return Photo::where('category', 'estudio')->orderBy('id', 'desc')->get();
+    }
+
+    public function exteriorPhotos(){
+        return Photo::where('category', 'exterior')->orderBy('id', 'desc')->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -37,15 +45,21 @@ class PhotoController extends Controller
     public function store(Request $request)
     {
         $request->validate(['photo' => 'required|image|max:4000']);
+        $data = $request->all();
         $photoForUpload = $request->photo;
-        $obj = Cloudinary::upload($photoForUpload->getRealPath(), ['folder' => 'photos']);
+        if($request->category == 'estudio'){
+            $obj = Cloudinary::upload($photoForUpload->getRealPath(), ['folder' => 'photos/estudio']);
+        }
+        if($request->category == 'exterior'){
+            $obj = Cloudinary::upload($photoForUpload->getRealPath(), ['folder' => 'photos/exterior']);
+        }
         $url = $obj->getSecurePath();
         $photo_id = $obj->getPublicId();
 
-        $request->photo = $url;
-        $request->photo_id = $photo_id;
+        $data['photo'] = $url;
+        $data['photo_id'] = $photo_id;
 
-        return Photo::create($request);
+        return Photo::create($data);
     }
 
     /**

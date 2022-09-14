@@ -79,9 +79,10 @@ class UserController extends Controller
             'name' => 'required|max:64',
             'password' => 'required|min:8'
         ]);
+        $data = $request->all();
 
-        $request->password = Hash::make($request->password);
-        return $user->update($request->all());
+        $data['password'] = Hash::make($request->password);
+        return $user->update($data);
 
     }
 

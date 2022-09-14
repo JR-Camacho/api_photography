@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [AuthController::class, 'login']);
+Route::get('photos-estudio', [PhotoController::class, 'estudioPhotos']);
+Route::get('photos-exterior', [PhotoController::class, 'exteriorPhotos']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('register', [AuthController::class, 'register']);
