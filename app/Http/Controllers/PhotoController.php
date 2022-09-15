@@ -68,9 +68,9 @@ class PhotoController extends Controller
      * @param  \App\Models\Photo  $photo
      * @return \Illuminate\Http\Response
      */
-    public function show(Photo $photo)
+    public function show($id)
     {
-        //
+        return Photo::findOrFail($id);
     }
 
     /**
@@ -94,19 +94,26 @@ class PhotoController extends Controller
     public function update(Request $request)
     {
         $photo = Photo::findOrFail($request->id);
+        $request->validate(['photo' => 'required|image|max:4000']);
+        $data = $request->all();
 
         $photo_id = $photo->photo_id;
         Cloudinary::destroy($photo_id);
 
         $photoForUpdate = $request->photo;
-        $obj = Cloudinary::upload($photoForUpdate->getRealPath(), ['folder' => 'photos']);
+        if($request->category == 'estudio'){
+            $obj = Cloudinary::upload($photoForUpdate->getRealPath(), ['folder' => 'photos/estudio']);
+        }
+        if($request->category == 'exterior'){
+            $obj = Cloudinary::upload($photoForUpdate->getRealPath(), ['folder' => 'photos/exterior']);
+        }
         $url = $obj->getSecurePath();
         $photo_id = $obj->getPublicId();
 
-        $request->photo = $url;
-        $request->photo_id = $photo_id;
+        $data['photo'] = $url;
+        $data['photo_id'] = $photo_id;
 
-        return $photo->update($request);
+        return $photo->update($data);
     }
 
     /**
@@ -115,9 +122,9 @@ class PhotoController extends Controller
      * @param  \App\Models\Photo  $photo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $photo = Photo::findOrFail($request->id);
+        $photo = Photo::findOrFail($id);
       
         $photo_id = $photo->photo_id;
         Cloudinary::destroy($photo_id);

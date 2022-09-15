@@ -69,4 +69,8 @@ class AuthController extends Controller
             "msg" => "Logout"
         ]);
     }
+
+    public function destroy($id){
+        return User::findOrFail($id)->delete();
+    }
 }
