@@ -14,7 +14,7 @@ class MessageController extends Controller
      */
     public function index()
     {
-        return Message::all();
+        return Message::orderBy('id', 'desc')->get();
     }
 
     /**
@@ -45,9 +45,9 @@ class MessageController extends Controller
      * @param  \App\Models\Message  $message
      * @return \Illuminate\Http\Response
      */
-    public function show(Message $message)
+    public function show($id)
     {
-        //
+        return Message::findOrFail($id);
     }
 
     /**

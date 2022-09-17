@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('update-photo', [PhotoController::class, 'update']);
     Route::delete('delete-photo/{id}', [PhotoController::class, 'destroy']);
     Route::get('messages', [MessageController::class, 'index']);
+    Route::get('show-message/{id}', [MessageController::class, 'show']);
     Route::delete('delete-message/{id}', [MessageController::class, 'destroy']);
 });
 
